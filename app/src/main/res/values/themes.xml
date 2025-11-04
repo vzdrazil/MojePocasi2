@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base styl -->
+    <style name="Base.Theme.MojePocasi" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- sem můžeš dát vlastní atributy -->
+    </style>
+
+    <!-- Hlavní styl aplikace -->
+    <style name="Theme.MojePocasi" parent="Base.Theme.MojePocasi">
+        <item name="android:windowTranslucentNavigation">true</item>>
+        <!-- sem můžeš dát další úpravy specifické pro tuto appku -->
+    </style>
+</resources>
