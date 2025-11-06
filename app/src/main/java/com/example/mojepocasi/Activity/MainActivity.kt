@@ -23,7 +23,9 @@ import com.example.mojepocasi.ui.theme.MojePocasiTheme
 import retrofit2.Call
 import retrofit2.Response
 import java.util.Calendar
-import com.github.matteobattilana.weather.PrecipType
+import com.airbnb.lottie.LottieAnimationView
+import android.view.WindowManager
+
 
 
 class MainActivity : ComponentActivity() {
@@ -35,8 +37,9 @@ class MainActivity : ComponentActivity() {
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.apply{
-            addFlags(windowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            statusBarColor=Color.Transparent
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = android.graphics.Color.TRANSPARENT
+
         }
         binding.apply {
             var lat=51.50
@@ -55,17 +58,19 @@ class MainActivity : ComponentActivity() {
                         detailLayout.visibility=View.VISIBLE
                         data?.let{
                             StatusText.text=it.weather?.get(0)?.main ?: "-"
-                        WindText.text=it.wind.speed.let{Math.round(it).toString()} +"Km"
-                            MaxTempText.text=it.main.tempMax.let{Math.round(it).toString()}+"°"
-                        CurrentTempText.text=it.main.temp.let{Math.round(it).toString()}+"°"
-                        MinTempText.text=it.main.tempMax.let{Math.round(it).toString()}+"°"
-
+                        WindText.text=it.wind?.speed?.let{Math.round(it).toString()} +"Km"
+                            MaxTempText.text=it.main?.tempMax?.let{Math.round(it).toString()}+"°"
+                        CurrentTempText.text=it.main?.temp?.let{Math.round(it).toString()}+"°"
+                        MinTempText.text=it.main?.tempMax?.let{Math.round(it).toString()}+"°"
+                            val icon = it.weather?.get(0)?.icon ?: "-"
                         val drawable=if(IsNightNow()) R.drawable.night_bg
                             else{
-                                SetDynamicallyWallpaper(it.weather?.get(0)?.icon?:"-")
+                            setDynamicallyWallpaper(icon, lottieAnimationView)
 
                             }
                             BgImage.setImageResource(drawable)
+                            //SetEffectRainSnow(it.weather?.get(0)?.icon?: "-")
+
                         }
 
                     }
@@ -91,38 +96,71 @@ class MainActivity : ComponentActivity() {
     private fun IsNightNow(): Boolean{
     return calendar.get(Calendar.HOUR_OF_DAY) >= 18
     }
-    private fun SetDynamicallyWallpaper(icon:String):Int{
-        return when(icon.dropLast(1)){
-            "01"->{
-                InitWeatherView(PrecipType.CLEAR)
+    private fun setDynamicallyWallpaper(icon: String, weatherAnim: LottieAnimationView): Int {
+        return when (icon.dropLast(1)) {
+            "01" -> {
+                weatherAnim.setAnimation(R.raw.clear_sky)  // jasná obloha
+                weatherAnim.playAnimation()
                 R.drawable.snow_bg
             }
-            "02","03","04"->{
-                InitWeatherView(PrecipType.CLEAR)
+            "02", "03", "04" -> {
+                weatherAnim.setAnimation(R.raw.cloudy) // oblačno
+                weatherAnim.playAnimation()
                 R.drawable.cloudy_bg
             }
-            "09","10","11"->{
-                InitWeatherView(PrecipType.RAIN)
+            "09", "10", "11" -> {
+                weatherAnim.setAnimation(R.raw.rain)   // déšť
+                weatherAnim.playAnimation()
                 R.drawable.rainy_bg
             }
-            "13"->{
-                InitWeatherView(PrecipType.SNOW)
+            "13" -> {
+                weatherAnim.setAnimation(R.raw.snow)   // sníh
+                weatherAnim.playAnimation()
                 R.drawable.snow_bg
             }
-            "50"->{
-                InitWeatherView(PrecipType.CLEAR)
+            "50" -> {
+                weatherAnim.setAnimation(R.raw.haze)   // mlha / haze
+                weatherAnim.playAnimation()
                 R.drawable.haze_bg
             }
             else -> 0
         }
     }
-    private fun InitWeatherView(type: PrecipType){
+
+
+    private fun setEffectRainSnow(icon: String, lottieView: LottieAnimationView) {
+        when (icon.dropLast(1)) {
+            "01" -> {
+                lottieView.setAnimation(R.raw.clear_sky)
+            }
+            "02", "03", "04" -> {
+                lottieView.setAnimation(R.raw.cloudy)
+            }
+            "09", "10", "11" -> {
+                lottieView.setAnimation(R.raw.rain)
+            }
+            "13" -> {
+                lottieView.setAnimation(R.raw.snow)
+            }
+            "50" -> {
+                lottieView.setAnimation(R.raw.haze)
+            }
+            else -> {
+                lottieView.cancelAnimation() // pokud není animace k dispozici
+            }
+        }
+        lottieView.playAnimation()
+    }
+
+
+
+    /*private fun InitWeatherView(type: PrecipType){
         binding.weatherView.apply{
             setWeatherData(type)
             angle=-20
             emissionRate=100.0f
         }
-    }
+    }*/
 }
 
 @Composable

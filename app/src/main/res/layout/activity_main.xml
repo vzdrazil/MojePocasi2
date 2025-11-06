@@ -15,19 +15,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/sunny_bg" />
-
-    <com.github.matteobattilana.weather.WeatherView
-        android:id="@+id/weatherView"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:lottie_autoPlay="false"
+        app:lottie_loop="true"
+        android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    </com.github.matteobattilana.weather.WeatherView>
 
     <ImageView
         android:id="@+id/AddCity"
@@ -79,7 +78,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/imageView31"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:src="@drawable/wind" />
@@ -100,7 +99,7 @@
 
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/textView36"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:shadowColor="@color/black"

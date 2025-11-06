@@ -8,9 +8,7 @@ plugins {
 
 android {
     namespace = "com.example.mojepocasi"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.mojepocasi"
@@ -71,11 +69,18 @@ dependencies {
     //gson
     implementation("com.google.code.gson:gson:2.9.1")
     //other
-    implementation("com.github.MatteoBattilana:WeatherView:3.0.0")
+    implementation("com.airbnb.android:lottie:6.0.0")
     //viewModel
     implementation("androidx.activity:activity-ktx:1.4.0")
     implementation("com.github.Dimezis:BlurView:version-2.0.3")
     implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+
+    /*implementation("com.github.plattysoft:Leonids:1.3.2")
+    implementation("com.github.plattysoft:Leonids:1746429")
+    implementation (files("libs/LeonidsLib-1.3.2.jar"))*/
+
+
 
 }
 kapt { correctErrorTypes = true }
