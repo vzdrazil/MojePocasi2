@@ -15,17 +15,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.mojepocasi.R
 import com.example.mojepocasi.ViewModel.WeatherViewModel
 import com.example.mojepocasi.databinding.ActivityMainBinding
 import com.example.mojepocasi.model.CurrentResponseApi
 import com.example.mojepocasi.ui.theme.MojePocasiTheme
 import retrofit2.Call
 import retrofit2.Response
+import java.util.Calendar
+import com.github.matteobattilana.weather.PrecipType
 
 
 class MainActivity : ComponentActivity() {
     lateinit var binding: ActivityMainBinding
     private val weatherViewModel: WeatherViewModel by viewModels()
+    private val calendar by lazy{ Calendar.getInstance() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
@@ -49,8 +53,21 @@ class MainActivity : ComponentActivity() {
                         val data=response.body()
                         progressBar.visibility= View.GONE
                         detailLayout.visibility=View.VISIBLE
-                        data?.let{StatusText.text=it.weather?.get(0)?.main ?:"-"
-                        WindText.text=it.wind.speed.let{Math.round(it).toString()} }
+                        data?.let{
+                            StatusText.text=it.weather?.get(0)?.main ?: "-"
+                        WindText.text=it.wind.speed.let{Math.round(it).toString()} +"Km"
+                            MaxTempText.text=it.main.tempMax.let{Math.round(it).toString()}+"°"
+                        CurrentTempText.text=it.main.temp.let{Math.round(it).toString()}+"°"
+                        MinTempText.text=it.main.tempMax.let{Math.round(it).toString()}+"°"
+
+                        val drawable=if(IsNightNow()) R.drawable.night_bg
+                            else{
+                                SetDynamicallyWallpaper(it.weather?.get(0)?.icon?:"-")
+
+                            }
+                            BgImage.setImageResource(drawable)
+                        }
+
                     }
                 }
 
@@ -69,6 +86,41 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+        }
+    }
+    private fun IsNightNow(): Boolean{
+    return calendar.get(Calendar.HOUR_OF_DAY) >= 18
+    }
+    private fun SetDynamicallyWallpaper(icon:String):Int{
+        return when(icon.dropLast(1)){
+            "01"->{
+                InitWeatherView(PrecipType.CLEAR)
+                R.drawable.snow_bg
+            }
+            "02","03","04"->{
+                InitWeatherView(PrecipType.CLEAR)
+                R.drawable.cloudy_bg
+            }
+            "09","10","11"->{
+                InitWeatherView(PrecipType.RAIN)
+                R.drawable.rainy_bg
+            }
+            "13"->{
+                InitWeatherView(PrecipType.SNOW)
+                R.drawable.snow_bg
+            }
+            "50"->{
+                InitWeatherView(PrecipType.CLEAR)
+                R.drawable.haze_bg
+            }
+            else -> 0
+        }
+    }
+    private fun InitWeatherView(type: PrecipType){
+        binding.weatherView.apply{
+            setWeatherData(type)
+            angle=-20
+            emissionRate=100.0f
         }
     }
 }
