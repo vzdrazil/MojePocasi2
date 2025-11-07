@@ -59,6 +59,7 @@ class MainActivity : ComponentActivity() {
                         data?.let{
                             StatusText.text=it.weather?.get(0)?.main ?: "-"
                         WindText.text=it.wind?.speed?.let{Math.round(it).toString()} +"Km"
+                            HumidityText.text=it.main?.humidity?.toString()+"%"
                             MaxTempText.text=it.main?.tempMax?.let{Math.round(it).toString()}+"°"
                         CurrentTempText.text=it.main?.temp?.let{Math.round(it).toString()}+"°"
                         MinTempText.text=it.main?.tempMax?.let{Math.round(it).toString()}+"°"
@@ -82,7 +83,7 @@ class MainActivity : ComponentActivity() {
             })
         }
         enableEdgeToEdge()
-        setContent {
+        /*setContent {
             MojePocasiTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
@@ -91,7 +92,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
-        }
+        }*/
     }
     private fun IsNightNow(): Boolean{
     return calendar.get(Calendar.HOUR_OF_DAY) >= 18
