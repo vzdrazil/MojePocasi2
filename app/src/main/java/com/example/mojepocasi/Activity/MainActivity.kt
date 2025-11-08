@@ -2,6 +2,8 @@ package com.example.mojepocasi.Activity
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,13 +27,17 @@ import retrofit2.Response
 import java.util.Calendar
 import com.airbnb.lottie.LottieAnimationView
 import android.view.WindowManager
-
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mojepocasi.Adapter.ForecastAdapter
+import com.example.mojepocasi.model.ForecastResponseApi
+import eightbitlab.com.blurview.RenderScriptBlur
 
 
 class MainActivity : ComponentActivity() {
     lateinit var binding: ActivityMainBinding
     private val weatherViewModel: WeatherViewModel by viewModels()
     private val calendar by lazy{ Calendar.getInstance() }
+    private val forecastAdapter by lazy{ ForecastAdapter() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
@@ -81,8 +87,48 @@ class MainActivity : ComponentActivity() {
                     Toast.makeText(this@MainActivity, t.toString(), Toast.LENGTH_SHORT).show()
                 }
             })
-        }
-        enableEdgeToEdge()
+            //settings Blue View
+            var radius=10f
+            val devorView=window.decorView
+            val rootView=(devorView.findViewById(android.R.id.content) as ViewGroup?)
+            val windowBackground=devorView.background
+            rootView?.let{
+                blueView.setupWith(it, RenderScriptBlur(this@MainActivity))
+                    .setFrameClearDrawable(windowBackground)
+                    .setBlurRadius(radius)
+                blueView.outlineProvider= ViewOutlineProvider.BACKGROUND
+                blueView.clipToOutline=true
+
+            }
+            weatherViewModel.loadForecastWeather(lat,lon,"metric").enqueue(object:retrofit2.Callback<ForecastResponseApi>{
+                override fun onResponse(
+                    call: Call<ForecastResponseApi?>,
+                    response: Response<ForecastResponseApi?>
+                ) {
+                    if(response.isSuccessful){
+                val data=response.body()
+                        blueView.visibility=View.VISIBLE
+                        data?.let {
+                            forecastAdapter.differ.submitList(it.list)
+                            forecastView.apply{
+                                layoutManager= LinearLayoutManager(this@MainActivity,
+                                    LinearLayoutManager.HORIZONTAL,false)
+                                adapter=forecastAdapter
+                                visibility = View.VISIBLE
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<ForecastResponseApi?>,
+                    t: Throwable
+                ) {
+
+                }
+
+            })}
+        //enableEdgeToEdge()
         /*setContent {
             MojePocasiTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

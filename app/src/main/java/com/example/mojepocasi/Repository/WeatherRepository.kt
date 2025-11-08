@@ -3,6 +3,6 @@ package com.example.mojepocasi.Repository
 import com.example.mojepocasi.Server.ApiServices
 
 class WeatherRepository(val api: ApiServices) {
-    fun GetCurrentWeather(lat:Double,lng: Double,unit:String)=api.getCurrentWeather(lat,lng,unit,"nereknu")
-    fun GetForecastWeather(lat:Double,lng: Double,unit:String)=api.getForecastWeather(lat,lng,unit,"nereknu")
+    fun GetCurrentWeather(lat:Double,lng: Double,unit:String)=api.getCurrentWeather(lat,lng,unit,"pes123")
+    fun GetForecastWeather(lat:Double,lng: Double,unit:String)=api.getForecastWeather(lat,lng,unit,"pes123")
 }

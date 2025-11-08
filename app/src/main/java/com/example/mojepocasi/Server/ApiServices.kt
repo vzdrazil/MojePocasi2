@@ -1,4 +1,5 @@
 package com.example.mojepocasi.Server
+import com.example.mojepocasi.model.CityResponseApi
 import com.example.mojepocasi.model.CurrentResponseApi
 import com.example.mojepocasi.model.ForecastResponseApi
 import retrofit2.http.GET
@@ -19,6 +20,12 @@ interface ApiServices {
         @Query("lon") lon: Double,
         @Query("units") units: String,
         @Query("appid") ApiKey: String):Call<ForecastResponseApi>
+
+
+    @GET("geo/1.0/direct")
+    fun GetCitiesList(@Query("q") q: String,
+                      @Query("limit") limit: Int,
+                      @Query("appid") ApiKey: String):Call<CityResponseApi>
 
 
 }
