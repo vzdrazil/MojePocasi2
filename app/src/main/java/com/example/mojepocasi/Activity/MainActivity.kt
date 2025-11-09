@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mojepocasi.Adapter.ForecastAdapter
 import com.example.mojepocasi.model.ForecastResponseApi
 import eightbitlab.com.blurview.RenderScriptBlur
+import android.content.Intent
 
 
 class MainActivity : ComponentActivity() {
@@ -48,9 +49,20 @@ class MainActivity : ComponentActivity() {
 
         }
         binding.apply {
-            var lat=51.50
-            var lon=-0.12
-            var name="London"
+            var lat=intent.getDoubleExtra("lat",0.0)
+            var lon=intent.getDoubleExtra("lon",0.0)
+            var name=intent.getStringExtra("name")
+
+            if(lat==0.0)
+            {
+                var lat=51.50
+                var lon=-0.12
+                var name="London"
+            }
+            AddCity.setOnClickListener{
+                startActivity(Intent(this@MainActivity, CityListActivity::class.java))
+            }
+
             CityText.text=name
             progressBar.visibility=View.VISIBLE
             weatherViewModel.loadCurrentWeather(lat,lon,"metric").enqueue(object:retrofit2.Callback<CurrentResponseApi>{

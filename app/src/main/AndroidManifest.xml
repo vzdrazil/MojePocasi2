@@ -16,7 +16,10 @@
         android:theme="@style/Theme.MojePocasi">
         <activity
             android:name=".Activity.CityListActivity"
-            android:exported="false" />
+            android:exported="false"
+
+            android:theme="@style/Theme.MojePocasi" />
+
         <activity
             android:name=".Activity.MainActivity"
             android:exported="true"

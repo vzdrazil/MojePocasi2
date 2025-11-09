@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Base styl -->
-    <style name="Base.Theme.MojePocasi" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Base.Theme.MojePocasi" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- sem můžeš dát vlastní atributy -->
     </style>
 

@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.AsyncListDiffer
 import java.util.Calendar
 import com.bumptech.glide.Glide
+import com.example.mojepocasi.Activity.MainActivity
 import com.example.mojepocasi.databinding.CityViewholderBinding
+import com.example.mojepocasi.model.CityResponseApi
+import android.content.Intent
 
 class CityAdapter: RecyclerView.Adapter<CityAdapter.ViewHolder>() {
     private lateinit var binding: CityViewholderBinding
@@ -27,68 +30,31 @@ class CityAdapter: RecyclerView.Adapter<CityAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: CityAdapter.ViewHolder, position: Int) {
         val binding= CityViewholderBinding.bind(holder.itemView)
-        val date= SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(differ.currentList[position].dtTxt.toString())
-        val calendar= Calendar.getInstance()
-        calendar.time=date
-        val dayOfWeek=when(calendar.get(Calendar.DAY_OF_WEEK)) {
-            1 -> "Po"
-            2 -> "Ut"
-            3 -> "St"
-            4 -> "Ct"
-            5 -> "Pa"
-            6 -> "So"
-            7 -> "Ne"
-            else -> "-"
+        binding.cityText.text=differ.currentList[position].name
+        binding.root.setOnClickListener {
+            val intent=Intent(binding.root.context, MainActivity::class.java)
+            intent.putExtra("lat",differ.currentList[position].lat)
+            intent.putExtra("lon",differ.currentList[position].lon)
+            intent.putExtra("name",differ.currentList[position].name)
+            binding.root.context.startActivity(intent)
         }
-        binding.nameDayText.text=dayOfWeek
-        val hour=calendar.get(Calendar.HOUR_OF_DAY)
-        val amPm=if(hour<12) "AM" else "PM"
-        val hour12=calendar.get(Calendar.HOUR)
-       binding.hourText.text=hour12.toString()+amPm
-        binding.tempText.text=differ.currentList[position].main?.temp?.let{Math.round(it)}.toString()+"°"
-        val icon=when(differ.currentList[position].weather?.get(0)?.icon.toString()){
-            "01d","0n"->"sunny"
-            "02d","02n"->"cloudy_sunny"
-            "03d","03n"->"cloudy_sunny"
-            "04d","04n"->"cloudy"
-            "09d","09n"->"rainy"
-            "10d","10n"->"rainy"
-            "11d","11n"->"storm"
-            "13d","13n"->"snowy"
-            "50d","50n"->"windy"
-            else->"sunny"
-
-
-
-
-        }
-        val drawableResourceId:Int=binding.root.resources.getIdentifier(
-            icon,
-            "drawable",binding.root.context.packageName
-
-
-        )
-        Glide.with(binding.root.context)
-            .load(drawableResourceId).into(binding.pic)
-
-
 
 
     }
     inner class ViewHolder: RecyclerView.ViewHolder(binding.root)
 
     override fun getItemCount()=differ.currentList.size
-    private val differCallback=object : DiffUtil.ItemCallback<ForecastResponseApi.data>() {
+    private val differCallback=object : DiffUtil.ItemCallback<CityResponseApi.CityResponseApiItem>() {
         override fun areItemsTheSame(
-            oldItem: ForecastResponseApi.data,
-            newItem: ForecastResponseApi.data
+            oldItem: CityResponseApi.CityResponseApiItem,
+            newItem: CityResponseApi.CityResponseApiItem
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: ForecastResponseApi.data,
-            newItem: ForecastResponseApi.data):Boolean{return oldItem == newItem}
+            oldItem: CityResponseApi.CityResponseApiItem,
+            newItem: CityResponseApi.CityResponseApiItem):Boolean{return oldItem == newItem}
 
 
 
