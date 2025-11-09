@@ -32,6 +32,7 @@ import com.example.mojepocasi.Adapter.ForecastAdapter
 import com.example.mojepocasi.model.ForecastResponseApi
 import eightbitlab.com.blurview.RenderScriptBlur
 import android.content.Intent
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -41,6 +42,8 @@ class MainActivity : ComponentActivity() {
     private val forecastAdapter by lazy{ ForecastAdapter() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Thread.sleep(3000)
+        installSplashScreen()
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.apply{
