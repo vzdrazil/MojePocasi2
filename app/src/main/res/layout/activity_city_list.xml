@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical"
+    tools:context=".Activity.CityListActivity"
+    tools:padding="24dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="174dp"
+        android:layout_height="33dp"
+
+        android:layout_marginTop="32dp"
+        android:text="Search your city" />
+
+    <EditText
+        android:id="@+id/cityEdit"
+        android:layout_width="297dp"
+        android:layout_height="48dp"
+        android:background="@drawable/edittext_bg"
+        android:ems="10"
+        android:hint="type your city"
+        android:inputType="text"
+        android:padding="8dp"
+        android:textColorHint="@color/black"
+        android:textSize="12sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cityView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</LinearLayout>
