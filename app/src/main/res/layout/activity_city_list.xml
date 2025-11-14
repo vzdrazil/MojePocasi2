@@ -7,7 +7,9 @@
     android:layout_marginTop="8dp"
     android:orientation="vertical"
     tools:context=".Activity.CityListActivity"
-    tools:padding="24dp">
+    tools:padding="24dp"
+
+    >
 
     <TextView
         android:id="@+id/textView"

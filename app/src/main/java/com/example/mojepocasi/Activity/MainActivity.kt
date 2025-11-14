@@ -22,6 +22,7 @@ import retrofit2.Call
 import retrofit2.Response
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import java.util.*
+import android.graphics.Color
 
 class MainActivity : ComponentActivity() {
 
@@ -78,8 +79,23 @@ class MainActivity : ComponentActivity() {
                                 HumidityText.text = it.main?.humidity?.toString() + "%"
                                 MaxTempText.text =
                                     it.main?.tempMax?.let { t -> Math.round(t).toString() } + "°"
-                                CurrentTempText.text =
-                                    it.main?.temp?.let { t -> Math.round(t).toString() } + "°"
+
+                                val temp = it.main?.temp?.let { t -> Math.round(t) } ?: 0
+                                CurrentTempText.text = "$temp°"
+
+
+                                val tempColor = when
+                                {
+                                    temp < -11 -> "#4B0082"       // tmavě fialová
+                                    temp in -11..0 -> "#003366"        // tmavě modrá
+                                    temp in 0..10 -> "#339966"   // zelená
+                                    temp in 11..20 -> "#FFFF66"  // světle žlutá
+                                    temp in 21..30 -> "#FF9933"  // oranžová
+                                    temp > 30 -> "#FF3300"       // červená
+                                    else -> "#000000"            // fallback černá
+                                }
+
+                                CurrentTempText.setTextColor(Color.parseColor(tempColor))
                                 MinTempText.text =
                                     it.main?.tempMin?.let { t -> Math.round(t).toString() } + "°"
 
@@ -188,8 +204,13 @@ class MainActivity : ComponentActivity() {
                 weatherAnim.playAnimation()
                 if (isDay) R.drawable.cloudy_bg else R.drawable.night_bg
             }
-            "09", "10", "11" -> {
+            "09", "10" -> {
                 weatherAnim.setAnimation(R.raw.rain)
+                weatherAnim.playAnimation()
+                if (isDay) R.drawable.rainy_bg else R.drawable.night_bg
+            }
+            "11" -> {  // bouřka
+                weatherAnim.setAnimation(R.raw.superstorm)
                 weatherAnim.playAnimation()
                 if (isDay) R.drawable.rainy_bg else R.drawable.night_bg
             }
